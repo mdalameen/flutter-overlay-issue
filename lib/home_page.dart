@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -35,14 +35,43 @@ class HomePage extends StatelessWidget {
                                         ? Container(
                                             color: Colors.yellow,
                                           )
-                                        : InAppWebView(
-                                            initialData: InAppWebViewInitialData(
-                                                data:
-                                                    '<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Tag along with <a href="https://twitter.com/KhanhNwin?ref_src=twsrc%5Etfw">@KhanhNwin</a> at I/O Connect Miami! 🌴<br><br>More <a href="https://twitter.com/hashtag/GoogleIO?src=hash&amp;ref_src=twsrc%5Etfw">#GoogleIO</a> events → <a href="https://t.co/Zk0QmU5i0q">https://t.co/Zk0QmU5i0q</a> <a href="https://t.co/CUmFYLH12Z">pic.twitter.com/CUmFYLH12Z</a></p>&mdash; Flutter (@FlutterDev) <a href="https://twitter.com/FlutterDev/status/1672303704467185665?ref_src=twsrc%5Etfw">June 23, 2023</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>'),
-                                          ),
+                                        : const AppWebViewWidget(),
                                   )))))
             ],
           ),
         ));
+  }
+}
+
+class AppWebViewWidget extends StatefulWidget {
+  const AppWebViewWidget({super.key});
+
+  @override
+  State<AppWebViewWidget> createState() => _AppWebViewWidgetState();
+}
+
+class _AppWebViewWidgetState extends State<AppWebViewWidget> {
+  late WebViewController _controller;
+
+  @override
+  void initState() {
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse(
+          'https://twitter.com/FlutterDev/status/1665750338626830342'));
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WebViewWidget(
+      controller: _controller,
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
